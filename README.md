@@ -11,9 +11,10 @@ Das ideale Ergebnis ist eine vollständige Visualisierung aller Krankheiten, die
 * Welche Visualisierungstools nutzen wir?
 * Welche Libraries?
 * Wie kommen wir an die Daten von Scholia?
+* sparql queries für wikidata
 * Wie erhalten wir die vollständigen Daten?
 * Müssen wir noch andere Quellen hinzufügen?
-
+medical identifier 
 
 ### Implementation:
 * Pycircos
