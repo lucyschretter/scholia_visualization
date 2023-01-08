@@ -1,0 +1,61 @@
+count,gene_count,symptom_count,disease,diseaseLabel,genes,symptoms
+14,14,,http://www.wikidata.org/entity/Q131755,bipolar disorder,NPAS3 // CACNA1C // MSRA // ANK3 // PTPRN2 // IFT88 // ERC2 // KCNMB2 // COMMD10 // RIN2 // MYO18B // PHF8 // CNTNAP2 // NLRC5,
+5,5,,http://www.wikidata.org/entity/Q12174,obesity,PTPRN2 // CTNNA3 // RIN2 // CNTNAP2 // CSMD1,
+5,5,,http://www.wikidata.org/entity/Q4340209,mental depression,NPAS3 // CDH13 // RORA // IFT88 // MYO18B,
+5,5,,http://www.wikidata.org/entity/Q11081,Alzheimer's disease,RELN // CACNA1G // NKAIN2 // CNTNAP2 // CSMD1,
+4,4,,http://www.wikidata.org/entity/Q520127,periodontitis,CDH13 // ERC2 // NKAIN2 // CSMD1,
+3,3,,http://www.wikidata.org/entity/Q35869,asthma,NOTCH4 // RORA // CTNNA3,
+3,3,,http://www.wikidata.org/entity/Q55950055,unipolar depression,CACNA1C // ANK3 // SP4,
+3,3,,http://www.wikidata.org/entity/Q42844,major depressive disorder,CACNA1C // ANK3 // SP4,
+2,2,,http://www.wikidata.org/entity/Q844935,coronary artery disease,TNIK // CSMD1,
+2,2,,http://www.wikidata.org/entity/Q206901,amyotrophic lateral sclerosis,ANK3 // KCNMB2,
+2,2,,http://www.wikidata.org/entity/Q9051491,morbid obesity,TCF4 // SDCCAG8,
+2,2,,http://www.wikidata.org/entity/Q8277,multiple sclerosis,RELN // CSMD1,
+1,,1,http://www.wikidata.org/entity/Q49000071,gaming disorder,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q18558272,heroin dependence,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q3234995,vitamin B12 deficiency,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q3065932,cognitive disorder,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q2728811,premenstrual dysphoric disorder,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q917357,Rett syndrome,,cognitive dysfunction
+1,,1,http://www.wikidata.org/entity/Q84263196,COVID-19,,psychosis
+1,,1,http://www.wikidata.org/entity/Q21175356,exposure to soluble thallium compounds,,psychosis
+1,,1,http://www.wikidata.org/entity/Q21175349,tetraethyllead exposure,,psychosis
+1,,1,http://www.wikidata.org/entity/Q3964296,carbon disulfide exposure,,psychosis
+1,,1,http://www.wikidata.org/entity/Q160796,delirium,,psychosis
+1,1,,http://www.wikidata.org/entity/Q12214,smallpox,CSMD1,
+1,1,,http://www.wikidata.org/entity/Q28065616,syndromic X-linked intellectual disability Siderius type,PHF8,
+1,1,,http://www.wikidata.org/entity/Q32143061,hereditary spastic paraplegia 45,NT5C2,
+1,1,,http://www.wikidata.org/entity/Q11088,celiac disease,NKAIN2,
+1,1,,http://www.wikidata.org/entity/Q55784933,Klippel-Feil anomaly-myopathy-facial dysmorphism syndrome,MYO18B,
+1,1,,http://www.wikidata.org/entity/Q32136733,renal hypomagnesemia 6,CNNM2,
+1,1,,http://www.wikidata.org/entity/Q1198391,intracranial aneurysm,CNNM2,
+1,1,,http://www.wikidata.org/entity/Q55783958,RIN2 syndrome,RIN2,
+1,1,,http://www.wikidata.org/entity/Q27674842,Bardet-Biedl syndrome 16,SDCCAG8,
+1,1,,http://www.wikidata.org/entity/Q53660491,autosomal dominant mental retardation 47,STAG1,
+1,1,,http://www.wikidata.org/entity/Q18553852,lymphoblastic leukemia,KCNMB2,
+1,1,,http://www.wikidata.org/entity/Q55345906,spinocerebellar ataxia type 42,CACNA1G,
+1,1,,http://www.wikidata.org/entity/Q27164447,arrhythmogenic right ventricular dysplasia 13,CTNNA3,
+1,1,,http://www.wikidata.org/entity/Q18553444,nicotine dependence,CTNNA3,
+1,1,,http://www.wikidata.org/entity/Q133772,dental caries,CTNNA3,
+1,1,,http://www.wikidata.org/entity/Q168403,myopia,PTPRN2,
+1,1,,http://www.wikidata.org/entity/Q28065627,syndromic X-linked intellectual disability 94,GRIA3,
+1,1,,http://www.wikidata.org/entity/Q2757585,Mowat-Wilson syndrome,ZEB2,
+1,1,,http://www.wikidata.org/entity/Q1164529,renal cell carcinoma,ZEB2,
+1,1,,http://www.wikidata.org/entity/Q55784936,"immunodeficiency, common variable, 12",NFKB1,
+1,1,,http://www.wikidata.org/entity/Q181923,attention deficit hyperactivity disorder,CDH13,
+1,1,,http://www.wikidata.org/entity/Q5340515,systemic scleroderma,NOTCH4,
+1,1,,http://www.wikidata.org/entity/Q830308,age related macular degeneration,NOTCH4,
+1,1,,http://www.wikidata.org/entity/Q180913,bulimia,MSRA,
+1,1,,http://www.wikidata.org/entity/Q41861,arterial hypertension,MSRA,
+1,1,,http://www.wikidata.org/entity/Q18554727,sclerosing cholangitis,TCF4,
+1,1,,http://www.wikidata.org/entity/Q1464888,Fuchs' endothelial dystrophy,TCF4,
+1,1,,http://www.wikidata.org/entity/Q1164401,Pitt-Hopkins syndrome,TCF4,
+1,1,,http://www.wikidata.org/entity/Q1477,ulcerative colitis,TCF4,
+1,1,,http://www.wikidata.org/entity/Q27677684,Brugada syndrome 3,CACNA1C,
+1,1,,http://www.wikidata.org/entity/Q3508705,Timothy syndrome,CACNA1C,
+1,1,,http://www.wikidata.org/entity/Q50349648,autosomal dominant non-syndromic intellectual disability44,TRIO,
+1,1,,http://www.wikidata.org/entity/Q18553536,syndromic intellectual disability,TRIO,
+1,1,,http://www.wikidata.org/entity/Q945238,peripheral neuropathy,TRIO,
+1,1,,http://www.wikidata.org/entity/Q3589154,familial temporal lobe epilepsy 7,RELN,
+1,1,,http://www.wikidata.org/entity/Q756610,otosclerosis,RELN,
+1,1,,http://www.wikidata.org/entity/Q130555,Norman–Roberts syndrome,RELN,
