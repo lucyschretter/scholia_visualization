@@ -19,4 +19,23 @@ To create a better overview our step
 6. tranfer the approaches to Sankey diagram
 7. how to: Hive Plot
 8. tranfer the approaches to Hive Plot
-9. discuss the results
+9. discuss the results --> When performing the workflow, we realized that we lacked a tangible objective. This is due to the not always present data on wikidata and our intention to try and see what data we can get for the majority of diseases.
+
+
+Definition of clear objectives:
+
+- Die Prävalenz von bestimmten Krankheiten in verschiedenen Altersgruppen und Geschlechtern.
+- Die Assoziation von bestimmten Genen mit bestimmten Krankheiten.
+- Die Häufigkeit von Komorbiditäten bei Patienten mit bestimmten Krankheiten.
+- Die Rolle von Umweltfaktoren bei der Entstehung bestimmter Krankheiten.
+- Die Auswirkungen von bestimmten Medikamenten auf die Symptome von Krankheiten.
+- Die geographische Verteilung von Krankheiten auf der Weltkarte.
+- Die Häufigkeit von bestimmten Symptomen bei Patienten mit bestimmten Krankheiten.
+- Die Verbindung von bestimmten Krankheiten mit sozioökonomischen Faktoren wie Bildung und Einkommen.
+- Die Entwicklung der Häufigkeit von bestimmten Krankheiten im Laufe der Zeit.
+- Die Verwendung von bestimmten Biomarkern zur Diagnose und Überwachung von Krankheiten.
+
+
+Fragen:
+- Sollen wir uns auf eine bestimmte Krankheit fokussieren oder auf die verschiedenen Krankheiten verknüpfen?
+- Haben wir die nötigen Daten dafür? (also mehr als nur die "possibly related diseases" zu implementieren)
