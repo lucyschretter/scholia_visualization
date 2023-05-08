@@ -2,9 +2,20 @@
 
 ## Visualization of (diseases in) Scholia (circos plots)
 
-__Wir visualisieren die verschiedenen Krankheiten__, welche auf https://scholia.toolforge.org/  vorhanden sind. Wir möchten dabei auf die veröffentlichten Paper und zusammenhängenden Krankheiten eingehen. Wir nutzen dafür Python und verschiedene Python Libraries. <br>
-Wir konzentrieren uns dabei auf die Circos Plots, um die Verbindungen der Krankheiten und deren Paper zu visualisieren. 
-Das ideale Ergebnis ist eine vollständige Visualisierung aller Krankheiten, die auf Scholia zu finden sind. Die Visualisierung soll dabei sehr aufschlussreich sein und sehr viele Informationen beinhalten, ohne die Übersichtlichkeit zu verringern. Im Idealfall ist die Visualisierung so gut, dass sie bei Scholia integriert werden kann. <br>
+__Im Rahmen unserer Projektarbeit analysieren wir die verschiedenen Krankheiten, die unter dem Punkt „Topics – Diseases“ in Scholia eingetragen sind. Diese sind <a href=https://scholia.toolforge.org/disease/>hier</a> abrufbar.__
+
+__Unser Projektziel ist das Erstellen eines Dashboards, das Nutzern einen Teil der Vielfältigkeit der Wikidata Daten auf Scholia veranschaulicht.__
+
+
+Durch die Verwendung unterschiedlicher Python Bibliotheken möchten wir das Dashboard mit aussagekräftigen und  übersichtlichen Visualisierungen anreichern. 
+Das Dashboard soll aus mehreren Visualisierungen bestehen, unter anderem mit einem Circos Plot spezifisch über die Krankheit Schizophrenie.
+
+Scholia stellt eine Fülle von Daten zur Verfügung, welche sich auf eine Vielzahl von Themen beziehen. Im Vordergrund steht hier das Thema „Diseases“, welches zehntausende von Krankheiten zusammenfasst.
+Bei der Recherche auf Scholia sind wir auf oft sehr verschachtelte Informationen gestoßen. Die Krankheiten sind untereinander zahlreich verknüpft, was eine anschauliche Betrachtung ohne viel Recherche erschwert.
+
+Um diese Herausforderung zu bewältigen, haben wir uns das Ziel gesetzt, ein Dashboard zu erstellen, das eine übersichtliche und leicht zugängliche Darstellung der Informationen ermöglicht. Dieses soll dabei unterstützen viele Verbindungen unter den Krankheiten ersichtlich zu bekommen. 
+Für die Projektumsetzung greifen wir auf die strukturierten Daten von Wikidata zurück, um eine semantische Verknüpfung zwischen den einzelnen Krankheiten und ihren Eigenschaften herzustellen. 
+
 
 
 ### Research:
