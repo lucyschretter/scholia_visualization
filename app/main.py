@@ -8,9 +8,11 @@ from util import plot_symptoms_histogram
 from util import pie_plot
 from util import plot_histogram
 from util import pie_plot_symptoms
+from util import publications_per_year_schizophrenia
+from util import clinical_trials_per_year
 
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from dash.dependencies import Input, Output
 from jupyter_dash import JupyterDash
 
@@ -23,7 +25,8 @@ app.layout = html.Div(children=[
         id='disease-dropdown',
         options=[
             {'label': 'Bipolar Disorder', 'value': 'Q131755'},
-            {'label': 'Migraine', 'value': 'Q133823'}
+            {'label': 'Migraine', 'value': 'Q133823'},
+            {'label': 'Schizophrenia', 'value': 'Q41112'}
         ],
         value='Select Diasese'
     ),
@@ -48,6 +51,12 @@ def update_graph(disease):
             dcc.Graph(id='histogram-treatments', figure=plot_histogram()),
             dcc.Graph(id='pie-plot-symptoms', figure=pie_plot_symptoms())
         ]
+    elif disease == 'Q41112':
+        return [
+            dcc.Graph(id='publications-per-year-schizophrenia', figure=publications_per_year_schizophrenia()),
+            dcc.Graph(id='clinical-trials-per-year-schizophrenia', figure=clinical_trials_per_year())
+        ]
     else:
         return html.Div('Select disease')
+
 
