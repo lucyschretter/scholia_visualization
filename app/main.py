@@ -26,7 +26,8 @@ app.layout = html.Div(children=[
         options=[
             {'label': 'Bipolar Disorder', 'value': 'Q131755'},
             {'label': 'Migraine', 'value': 'Q133823'},
-            {'label': 'Schizophrenia', 'value': 'Q41112'}
+            {'label': 'Schizophrenia', 'value': 'Q41112'},
+            {'label': 'Mental Depression', 'value': 'Q4340209'}
         ],
         value='Select Diasese'
     ),
@@ -55,6 +56,11 @@ def update_graph(disease):
         return [
             dcc.Graph(id='publications-per-year-schizophrenia', figure=publications_per_year_schizophrenia()),
             dcc.Graph(id='clinical-trials-per-year-schizophrenia', figure=clinical_trials_per_year())
+        ]
+    elif disease == 'Q4340209':
+        return [
+            dcc.Graph(id='publications-per-year-mental-depression',figure=depression_publications_per_year()),
+            dcc.Graph(id='co-occuring-topics', figure=depression_co_occuring_topics())
         ]
     else:
         return html.Div('Select disease')

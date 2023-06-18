@@ -730,3 +730,123 @@ def clinical_trials_per_year():
     )
 
     return fig
+
+
+
+# Util function: Mental Depression
+
+# bar plot publications per year
+def depression_publications_per_year():
+
+    # Define SPARQL query
+    query = f"""
+    PREFIX target: <http://www.wikidata.org/entity/Q4340209>
+
+    # Inspired from LEGOLAS - http://abel.lis.illinois.edu/legolas/
+    # Shubhanshu Mishra, Vetle Torvik
+    select ?year (count(?work) as ?number_of_publications) where {{
+      {{
+        select (str(?year_) as ?year) (0 as ?pages) where {{
+          # default values = 0
+          ?year_item wdt:P31 wd:Q577 .
+          ?year_item wdt:P585 ?date .
+          bind(year(?date) as ?year_)
+          {{
+            select (min(?year_) as ?earliest_year) where {{
+              {{ ?work wdt:P921/wdt:P31*/wdt:P279* target: . }}
+              union {{ ?work wdt:P921/wdt:P361+ target: . }}
+              union {{ ?work wdt:P921/wdt:P1269+ target: . }}
+              ?work wdt:P577 ?publication_date .
+              bind(year(?publication_date) as ?year_)
+            }}
+          }}
+          bind(year(now()) as ?next_year)
+          filter (?year_ >= ?earliest_year && ?year_ <= ?next_year)
+        }}
+      }}
+      union {{
+        select ?work (min(?years) as ?year) where {{
+          {{ ?work wdt:P921/wdt:P31*/wdt:P279* target: . }}
+          union {{ ?work wdt:P921/wdt:P361+ target: . }}
+          union {{ ?work wdt:P921/wdt:P1269+ target: . }}
+          ?work wdt:P577 ?dates .
+          bind(str(year(?dates)) as ?years) .
+        }}
+        group by ?work
+      }}
+    }}
+    group by ?year
+    order by ?year
+    """
+
+    # Set the query and format to JSON
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+
+    # Execute the query and convert the results to a Pandas DataFrame
+    results = sparql.query().convert()
+    df = pd.json_normalize(results["results"]["bindings"])
+    df["year.value"] = pd.to_numeric(df["year.value"])
+    df["number_of_publications.value"] = pd.to_numeric(df["number_of_publications.value"])
+
+    # Create the bar chart using Plotly
+    fig = px.bar(df, x="year.value", y="number_of_publications.value").update_layout(
+        title='Publications per year',
+        yaxis=dict(title='Number of Publications'),
+        xaxis=dict(title='Year',range=['1950','2023'])
+    ).update_traces(
+        hovertemplate='<b>Year:</b>%{x}<br><b>Number of Publications:</b>%{y}')
+
+    return fig
+
+
+# bar plot co-occuring topics
+def depression_co_occuring_topics():
+    sparql_query = '''
+    PREFIX target: <http://www.wikidata.org/entity/Q4340209>
+
+    SELECT ?count (CONCAT("/topics/{{ q }},", SUBSTR(STR(?topic), 32)) AS ?countUrl)
+           ?topic ?topicLabel (CONCAT("/topic/", SUBSTR(STR(?topic), 32)) AS ?topicUrl)
+           ?example_work ?example_workLabel (CONCAT("/work/", SUBSTR(STR(?example_work), 32)) AS ?example_workUrl)
+    WITH {
+      SELECT (COUNT(?work) AS ?count) ?topic (SAMPLE(?work) AS ?example_work) WHERE {
+        # Find works for the specific queried topic
+          ?work wdt:P921/( wdt:P31*/wdt:P279* | wdt:P361+ | wdt:P1269+) target: .
+
+        # Find co-occuring topics
+        ?work wdt:P921 ?topic .
+
+        # Avoid listing the queried topic
+          FILTER (target: != ?topic)
+      }
+      GROUP BY ?topic
+    } AS %result
+    WHERE {
+      # Label the results
+      INCLUDE %result
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "en,da,de,es,fr,jp,nl,no,ru,sv,zh" . }
+    }
+    ORDER BY DESC(?count)
+    '''
+
+    # Set the query and format to JSON
+    sparql.setQuery(sparql_query)
+    sparql.setReturnFormat(JSON)
+
+    # Execute the query and convert the results to a Pandas DataFrame
+    results = sparql.query().convert()
+    df = pd.json_normalize(results["results"]["bindings"])
+    df["count.value"] = pd.to_numeric(df["count.value"])
+
+    # filter the most relevant results
+    df_filtered = df[df['count.value'] > 500]
+    fig = px.bar(df_filtered,
+                 y='topicLabel.value',
+                 x='count.value').update_layout(
+        title='Publication Count by Top 10 Co-Occuring Topics',
+        xaxis=dict(title='Count'),
+        yaxis=dict(title='Topics')).update_traces(
+        #set the hover data
+        hovertemplate='<b>Count:</b>%{x}<br><b>Topic:</b>%{y}')
+
+    return fig
