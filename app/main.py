@@ -10,6 +10,8 @@ from util import plot_histogram
 from util import pie_plot_symptoms
 from util import publications_per_year_schizophrenia
 from util import clinical_trials_per_year
+from util import depression_publications_per_year
+from util import depression_co_occuring_topics
 
 from dash import dcc
 from dash import html
