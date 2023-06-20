@@ -4,7 +4,6 @@ import pandas as pd
 from SPARQLWrapper import SPARQLWrapper, JSON
 import plotly.express as px
 import plotly.graph_objs as go
-import matplotlib.pyplot as plt
 
 # sparql wrapper
 sparql = SPARQLWrapper("https://query.wikidata.org/sparql")
@@ -644,7 +643,7 @@ def publications_per_year_schizophrenia():
     return fig
 
 
-# clinical trial per year
+# clinical trials per year
 def clinical_trials_per_year():
     query = '''
     PREFIX target: <http://www.wikidata.org/entity/Q41112>
@@ -731,122 +730,89 @@ def clinical_trials_per_year():
 
     return fig
 
+# Bulimia Nervosa: clinical trials per year
+def clinical_trials_per_year_bulimia():
+    query = '''
+    PREFIX target: <http://www.wikidata.org/entity/Q64513386>
 
-
-# Util function: Mental Depression
-
-# bar plot publications per year
-def depression_publications_per_year():
-
-    # Define SPARQL query
-    query = f"""
-    PREFIX target: <http://www.wikidata.org/entity/Q4340209>
-
-    # Inspired from LEGOLAS - http://abel.lis.illinois.edu/legolas/
-    # Shubhanshu Mishra, Vetle Torvik
-    select ?year (count(?work) as ?number_of_publications) where {{
-      {{
-        select (str(?year_) as ?year) (0 as ?pages) where {{
-          # default values = 0
-          ?year_item wdt:P31 wd:Q577 .
-          ?year_item wdt:P585 ?date .
-          bind(year(?date) as ?year_)
-          {{
-            select (min(?year_) as ?earliest_year) where {{
-              {{ ?work wdt:P921/wdt:P31*/wdt:P279* target: . }}
-              union {{ ?work wdt:P921/wdt:P361+ target: . }}
-              union {{ ?work wdt:P921/wdt:P1269+ target: . }}
-              ?work wdt:P577 ?publication_date .
-              bind(year(?publication_date) as ?year_)
-            }}
-          }}
-          bind(year(now()) as ?next_year)
-          filter (?year_ >= ?earliest_year && ?year_ <= ?next_year)
-        }}
-      }}
-      union {{
-        select ?work (min(?years) as ?year) where {{
-          {{ ?work wdt:P921/wdt:P31*/wdt:P279* target: . }}
-          union {{ ?work wdt:P921/wdt:P361+ target: . }}
-          union {{ ?work wdt:P921/wdt:P1269+ target: . }}
-          ?work wdt:P577 ?dates .
-          bind(str(year(?dates)) as ?years) .
-        }}
-        group by ?work
-      }}
-    }}
-    group by ?year
-    order by ?year
-    """
-
-    # Set the query and format to JSON
+    SELECT
+      DISTINCT
+      ?start_date
+      ?trial ?trialLabel
+      ?intervention ?interventionLabel
+      ?sponsor ?sponsorLabel
+    WHERE {
+      ?trial wdt:P31 wd:Q30612 ;
+      wdt:P1050 / wdt:P279* target: .
+      OPTIONAL {
+        ?trial wdt:P580 ?starttime
+        BIND(SUBSTR(STR(?starttime), 0, 11) AS ?start_date)
+      }
+      OPTIONAL { ?trial wdt:P4844 ?intervention }
+      OPTIONAL { ?trial wdt:P859 ?sponsor }
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "en,da,de,es,fr,jp,nl,no,pl,ru,sv,zh". }
+    }
+    ORDER BY DESC(?starttime)
+    '''
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
-
-    # Execute the query and convert the results to a Pandas DataFrame
     results = sparql.query().convert()
-    df = pd.json_normalize(results["results"]["bindings"])
-    df["year.value"] = pd.to_numeric(df["year.value"])
-    df["number_of_publications.value"] = pd.to_numeric(df["number_of_publications.value"])
 
-    # Create the bar chart using Plotly
-    fig = px.bar(df, x="year.value", y="number_of_publications.value").update_layout(
-        title='Publications per year',
-        yaxis=dict(title='Number of Publications'),
-        xaxis=dict(title='Year',range=['1950','2023'])
-    ).update_traces(
-        hovertemplate='<b>Year:</b>%{x}<br><b>Number of Publications:</b>%{y}')
+    # data preprocessing
+    dict_trials = {}
 
-    return fig
+    trials = []
+    result_list = results['results']['bindings']
+    for res in result_list:
+        for res_key, res_value in res.items():
+            if res_key == 'trial':
+                uri = res_value['value']
+                splitted_uri = uri.split('/')
+                entity_id = splitted_uri[-1]
+                trials.append(entity_id)
+                dict_trials[entity_id] = res
 
 
-# bar plot co-occuring topics
-def depression_co_occuring_topics():
-    sparql_query = '''
-    PREFIX target: <http://www.wikidata.org/entity/Q4340209>
+    trial_df = pd.DataFrame.from_dict(dict_trials)
+    trial_df = trial_df.transpose()
+    years = []
+    start_dates = []
+    for index, row in trial_df.iterrows():
+        start_date = row['start_date']
+        if isinstance(start_date, dict) :
+            value = start_date['value']
+            start_dates.append(value)
+    for date in start_dates:
+        year = date[0:4]
+        years.append(year)
+    year_counts = {}
+    for year in sorted(years):
+        if year in year_counts:
+            year_counts[year] += 1
+        else:
+            year_counts[year] = 1
 
-    SELECT ?count (CONCAT("/topics/{{ q }},", SUBSTR(STR(?topic), 32)) AS ?countUrl)
-           ?topic ?topicLabel (CONCAT("/topic/", SUBSTR(STR(?topic), 32)) AS ?topicUrl)
-           ?example_work ?example_workLabel (CONCAT("/work/", SUBSTR(STR(?example_work), 32)) AS ?example_workUrl)
-    WITH {
-      SELECT (COUNT(?work) AS ?count) ?topic (SAMPLE(?work) AS ?example_work) WHERE {
-        # Find works for the specific queried topic
-          ?work wdt:P921/( wdt:P31*/wdt:P279* | wdt:P361+ | wdt:P1269+) target: .
+    year_counts_list = [(year, year_counts[year]) for year in year_counts]
 
-        # Find co-occuring topics
-        ?work wdt:P921 ?topic .
+    # group the data by year
+    data_by_year = {}
+    for year, value in year_counts_list:
+        if year in data_by_year:
+            data_by_year[year].append(value)
+        else:
+            data_by_year[year] = [value]
 
-        # Avoid listing the queried topic
-          FILTER (target: != ?topic)
-      }
-      GROUP BY ?topic
-    } AS %result
-    WHERE {
-      # Label the results
-      INCLUDE %result
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "en,da,de,es,fr,jp,nl,no,ru,sv,zh" . }
-    }
-    ORDER BY DESC(?count)
-    '''
+    # get the years and the values
+    years = list(data_by_year.keys())
+    values = [sum(data_by_year[year]) for year in years]
 
-    # Set the query and format to JSON
-    sparql.setQuery(sparql_query)
-    sparql.setReturnFormat(JSON)
-
-    # Execute the query and convert the results to a Pandas DataFrame
-    results = sparql.query().convert()
-    df = pd.json_normalize(results["results"]["bindings"])
-    df["count.value"] = pd.to_numeric(df["count.value"])
-
-    # filter the most relevant results
-    df_filtered = df[df['count.value'] > 500]
-    fig = px.bar(df_filtered,
-                 y='topicLabel.value',
-                 x='count.value').update_layout(
-        title='Publication Count by Top 10 Co-Occuring Topics',
-        xaxis=dict(title='Count'),
-        yaxis=dict(title='Topics')).update_traces(
-        #set the hover data
-        hovertemplate='<b>Count:</b>%{x}<br><b>Topic:</b>%{y}')
+    # create the plot
+    fig = go.Figure(data=[go.Bar(x=years, y=values)])
+    fig.update_layout(
+        title="Clinical Trials per Year",
+        xaxis_title="Years",
+        yaxis_title="Number of Trials",
+        xaxis=dict(tickangle=90),
+    )
 
     return fig
