@@ -4,7 +4,6 @@ import pandas as pd
 from SPARQLWrapper import SPARQLWrapper, JSON
 import plotly.express as px
 import plotly.graph_objs as go
-import matplotlib.pyplot as plt
 
 # sparql wrapper
 sparql = SPARQLWrapper("https://query.wikidata.org/sparql")
@@ -644,10 +643,97 @@ def publications_per_year_schizophrenia():
     return fig
 
 
-# clinical trial per year
+# clinical trials per year
 def clinical_trials_per_year():
     query = '''
     PREFIX target: <http://www.wikidata.org/entity/Q41112>
+
+    SELECT
+      DISTINCT
+      ?start_date
+      ?trial ?trialLabel
+      ?intervention ?interventionLabel
+      ?sponsor ?sponsorLabel
+    WHERE {
+      ?trial wdt:P31 wd:Q30612 ;
+      wdt:P1050 / wdt:P279* target: .
+      OPTIONAL {
+        ?trial wdt:P580 ?starttime
+        BIND(SUBSTR(STR(?starttime), 0, 11) AS ?start_date)
+      }
+      OPTIONAL { ?trial wdt:P4844 ?intervention }
+      OPTIONAL { ?trial wdt:P859 ?sponsor }
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "en,da,de,es,fr,jp,nl,no,pl,ru,sv,zh". }
+    }
+    ORDER BY DESC(?starttime)
+    '''
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+
+    # data preprocessing
+    dict_trials = {}
+
+    trials = []
+    result_list = results['results']['bindings']
+    for res in result_list:
+        for res_key, res_value in res.items():
+            if res_key == 'trial':
+                uri = res_value['value']
+                splitted_uri = uri.split('/')
+                entity_id = splitted_uri[-1]
+                trials.append(entity_id)
+                dict_trials[entity_id] = res
+
+
+    trial_df = pd.DataFrame.from_dict(dict_trials)
+    trial_df = trial_df.transpose()
+    years = []
+    start_dates = []
+    for index, row in trial_df.iterrows():
+        start_date = row['start_date']
+        if isinstance(start_date, dict) :
+            value = start_date['value']
+            start_dates.append(value)
+    for date in start_dates:
+        year = date[0:4]
+        years.append(year)
+    year_counts = {}
+    for year in sorted(years):
+        if year in year_counts:
+            year_counts[year] += 1
+        else:
+            year_counts[year] = 1
+
+    year_counts_list = [(year, year_counts[year]) for year in year_counts]
+
+    # group the data by year
+    data_by_year = {}
+    for year, value in year_counts_list:
+        if year in data_by_year:
+            data_by_year[year].append(value)
+        else:
+            data_by_year[year] = [value]
+
+    # get the years and the values
+    years = list(data_by_year.keys())
+    values = [sum(data_by_year[year]) for year in years]
+
+    # create the plot
+    fig = go.Figure(data=[go.Bar(x=years, y=values)])
+    fig.update_layout(
+        title="Clinical Trials per Year",
+        xaxis_title="Years",
+        yaxis_title="Number of Trials",
+        xaxis=dict(tickangle=90),
+    )
+
+    return fig
+
+# Bulimia Nervosa: clinical trials per year
+def clinical_trials_per_year_bulimia():
+    query = '''
+    PREFIX target: <http://www.wikidata.org/entity/Q64513386>
 
     SELECT
       DISTINCT

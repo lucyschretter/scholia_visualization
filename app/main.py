@@ -10,6 +10,7 @@ from util import plot_histogram
 from util import pie_plot_symptoms
 from util import publications_per_year_schizophrenia
 from util import clinical_trials_per_year
+from util import clinical_trials_per_year_bulimia
 
 from dash import dcc
 from dash import html
@@ -26,7 +27,8 @@ app.layout = html.Div(children=[
         options=[
             {'label': 'Bipolar Disorder', 'value': 'Q131755'},
             {'label': 'Migraine', 'value': 'Q133823'},
-            {'label': 'Schizophrenia', 'value': 'Q41112'}
+            {'label': 'Schizophrenia', 'value': 'Q41112'},
+            {'label': 'Bulimia Nervosa', 'value' : 'Q64513386'}
         ],
         value='Select Diasese'
     ),
@@ -55,6 +57,10 @@ def update_graph(disease):
         return [
             dcc.Graph(id='publications-per-year-schizophrenia', figure=publications_per_year_schizophrenia()),
             dcc.Graph(id='clinical-trials-per-year-schizophrenia', figure=clinical_trials_per_year())
+        ]
+    elif disease == 'Q64513386':
+        return [
+            dcc.Graph(id='clinical-trials-per-year-bulimia', figure=clinical_trials_per_year_bulimia())
         ]
     else:
         return html.Div('Select disease')
